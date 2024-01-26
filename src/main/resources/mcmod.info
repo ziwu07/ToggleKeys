@@ -1,0 +1,16 @@
+[
+{
+  "modid": "ToggleKeys",
+  "name": "Toggle Keys",
+  "description": "Allows you to toggle keys",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["ziwu07"],
+  "credits": "Used Template by dxxxxy",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
