@@ -15,7 +15,7 @@ plugins {
 
 apply plugin: "net.minecraftforge.gradle.forge"
 
-version = "1.0"
+version = "1.1"
 group = "ziwu07.togglekeys" //http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "ToggleKeys" //name of the output jar
 

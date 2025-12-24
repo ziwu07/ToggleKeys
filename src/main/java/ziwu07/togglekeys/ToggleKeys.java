@@ -11,18 +11,20 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
-import java.util.HashMap;
-import java.util.Map;
-
 
 @Mod(modid = ToggleKeys.MOD_ID, version = ToggleKeys.VERSION, name = ToggleKeys.MOD_NAME, clientSideOnly = true)
 public class ToggleKeys {
     public static final String MOD_ID = "ToggleKeys";
-    public static final String VERSION = "1.0";
+    public static final String VERSION = "1.1";
     public static final String MOD_NAME = "ToggleKeys";
-    private final HashMap<KeyBinding,KeyBinding> keyBinds = new HashMap<>();
     private KeyBinding unPressAll;
 
+    private KeyBinding holdForward;
+    private KeyBinding holdBackward;
+    private KeyBinding holdLeft;
+    private KeyBinding holdRight;
+    private KeyBinding holdLMouse;
+    KeyBinding[] keyList;
     @EventHandler
     public void init(FMLInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(this);
@@ -35,33 +37,51 @@ public class ToggleKeys {
                 "Backward",
                 "Left",
                 "Right",
-                "LMouse"
+                "LMouse",
+                "UnPressAll"
         };
         GameSettings gameSettings = Minecraft.getMinecraft().gameSettings;
-        KeyBinding[] keyList = new KeyBinding[]{
+        keyList = new KeyBinding[]{
                 gameSettings.keyBindForward,
                 gameSettings.keyBindBack,
                 gameSettings.keyBindLeft,
                 gameSettings.keyBindRight,
                 gameSettings.keyBindAttack
         };
-        KeyBinding keyBind;
-        for (int i = 0; i < KEY_DESCRIPTIONS.length; i++) {
-            keyBind = new KeyBinding(KEY_DESCRIPTIONS[i], 0, MOD_NAME);
-            keyBinds.put(keyBind, keyList[i]);
-            ClientRegistry.registerKeyBinding(keyBind);
-        }
-        unPressAll = new KeyBinding("UnPressAll", 0, MOD_NAME);
+        holdForward = new KeyBinding(KEY_DESCRIPTIONS[0], 0, MOD_NAME);
+        holdBackward = new KeyBinding(KEY_DESCRIPTIONS[1], 0, MOD_NAME);
+        holdLeft = new KeyBinding(KEY_DESCRIPTIONS[2], 0, MOD_NAME);
+        holdRight = new KeyBinding(KEY_DESCRIPTIONS[3], 0, MOD_NAME);
+        holdLMouse = new KeyBinding(KEY_DESCRIPTIONS[4], 0, MOD_NAME);
+        unPressAll = new KeyBinding(KEY_DESCRIPTIONS[5], 0, MOD_NAME);
         ClientRegistry.registerKeyBinding(unPressAll);
+        ClientRegistry.registerKeyBinding(holdBackward);
+        ClientRegistry.registerKeyBinding(holdForward);
+        ClientRegistry.registerKeyBinding(holdLeft);
+        ClientRegistry.registerKeyBinding(holdRight);
+        ClientRegistry.registerKeyBinding(holdLMouse);
     }
 
     @SubscribeEvent
     public void onInput(InputEvent.KeyInputEvent event) {
-        for (Map.Entry<KeyBinding,KeyBinding> entry: keyBinds.entrySet()){
-            if (entry.getKey().isPressed()) {
-                KeyBinding tempKey = entry.getValue();
-                KeyBinding.setKeyBindState(tempKey.getKeyCode(), !tempKey.isKeyDown());
-            }
+        if (holdForward.isPressed()) {
+            KeyBinding.setKeyBindState(keyList[0].getKeyCode(), !keyList[0].isKeyDown());
+            KeyBinding.setKeyBindState(keyList[1].getKeyCode(), false);
+        }
+        if (holdBackward.isPressed()) {
+            KeyBinding.setKeyBindState(keyList[1].getKeyCode(), !keyList[1].isKeyDown());
+            KeyBinding.setKeyBindState(keyList[0].getKeyCode(), false);
+        }
+        if (holdLeft.isPressed()) {
+            KeyBinding.setKeyBindState(keyList[2].getKeyCode(), !keyList[2].isKeyDown());
+            KeyBinding.setKeyBindState(keyList[3].getKeyCode(), false);
+        }
+        if (holdRight.isPressed()) {
+            KeyBinding.setKeyBindState(keyList[3].getKeyCode(), !keyList[3].isKeyDown());
+            KeyBinding.setKeyBindState(keyList[2].getKeyCode(), false);
+        }
+        if (holdLMouse.isPressed()) {
+            KeyBinding.setKeyBindState(keyList[4].getKeyCode(), !keyList[4].isKeyDown());
         }
         if (unPressAll.isPressed()) {
             KeyBinding.unPressAllKeys();
